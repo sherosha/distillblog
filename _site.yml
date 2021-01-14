@@ -3,10 +3,15 @@ title: "My Blog"
 description: |
   My Blog
 output_dir: "docs"
+base_url: https://sherosha.github.io/SheroshaRBlog/
 navbar:
   right:
     - text: "Home"
       href: index.html
     - text: "About"
       href: about.html
+    - text: "Resources"
+      href: resources.html
+    - text: "Random"
+      href: random.html
 output: distill::distill_article
