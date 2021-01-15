@@ -2,8 +2,7 @@
 title: "Random"
 description: |
   Non-data science related musings...blah blah
-author:
-  - name: Sherosha Raj
+
 date: "`r Sys.Date()`"
 output: distill::distill_article
 ---

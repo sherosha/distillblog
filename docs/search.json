@@ -3,10 +3,10 @@
     {
       "path": "about.html",
       "title": "About this site",
-      "description": "This blog captures my data science journey....",
+      "description": "This blog captures my data science journey....\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-01-15T00:43:05-05:00"
+      "last_modified": "2021-01-15T00:45:15-05:00"
     },
     {
       "path": "index.html",
@@ -14,21 +14,16 @@
       "description": "Welcome to the website. I hope you enjoy it!\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-01-15T00:43:06-05:00"
+      "last_modified": "2021-01-15T00:45:32-05:00"
     },
     {
       "path": "random.html",
       "title": "Random",
       "description": "Non-data science related musings...blah blah\n",
-      "author": [
-        {
-          "name": "Sherosha Raj",
-          "url": {}
-        }
-      ],
+      "author": [],
       "date": "`r Sys.Date()`",
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-01-15T00:43:06-05:00"
+      "last_modified": "2021-01-15T00:45:27-05:00"
     },
     {
       "path": "resources.html",
@@ -37,7 +32,7 @@
       "author": [],
       "date": "`r Sys.Date()`",
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-01-15T00:43:07-05:00"
+      "last_modified": "2021-01-15T00:45:20-05:00"
     }
   ],
   "collections": ["posts/posts.json"]

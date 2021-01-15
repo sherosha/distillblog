@@ -2,6 +2,7 @@
 title: "About this site"
 description: |
  This blog captures my data science journey....
+output: distill::distill_article
 ---
 
 ```{r setup, include=FALSE}
