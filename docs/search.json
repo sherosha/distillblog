@@ -2,18 +2,42 @@
   "articles": [
     {
       "path": "about.html",
-      "title": "About this blog",
-      "description": "Some additional details about the blog",
+      "title": "About this site",
+      "description": "This blog captures my data science journey",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-01-14T18:52:26-05:00"
+      "last_modified": "2021-01-14T18:58:59-05:00"
     },
     {
       "path": "index.html",
-      "title": "My Blog",
+      "title": "Sherosha's Blog",
+      "description": "Welcome to the website. I hope you enjoy it!\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-01-14T18:52:27-05:00"
+      "last_modified": "2021-01-14T18:59:00-05:00"
+    },
+    {
+      "path": "random.html",
+      "title": "Random",
+      "description": "Non-data science related musings\n",
+      "author": [
+        {
+          "name": "Sherosha Raj",
+          "url": {}
+        }
+      ],
+      "date": "`r Sys.Date()`",
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-01-14T18:59:01-05:00"
+    },
+    {
+      "path": "resources.html",
+      "title": "Resources",
+      "description": "My favourite data science resources\n",
+      "author": [],
+      "date": "`r Sys.Date()`",
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-01-14T18:59:01-05:00"
     }
   ],
   "collections": ["posts/posts.json"]
