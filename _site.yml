@@ -17,6 +17,6 @@ navbar:
       href: random.html
     - icon: fab fa-github
       href: https://github.com/sherosha
-    - icon: fab fa-twitter-square
+    - icon: fab fa-twitter
       href: https://twitter.com/SheroshaR
 output: distill::distill_article
