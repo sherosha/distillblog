@@ -1,7 +1,7 @@
 ---
 title: "About this site"
 description: |
- This blog captures my data science journey
+ This blog captures my data science journey....
 ---
 
 ```{r setup, include=FALSE}

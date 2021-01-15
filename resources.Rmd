@@ -1,7 +1,7 @@
 ---
 title: "Resources"
 description: |
-  My favourite data science resources
+  My favourite data science resources and websites.....
 
 date: "`r Sys.Date()`"
 output: distill::distill_article
