@@ -1,0 +1,409 @@
+---
+title: "Summarizing Toronto Public School Immunization Data from 2018/2019"
+description: |
+ This is a summary of 2018-2019 immunization data from Toronto Public Health.
+date: 01-14-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The data concerns vaccination coverage for diptheria,tetanus, polio (DTP) and measles, mumps, rubella (MMR).
+The data included here only covers the Greater Toronto Area for both public and Catholic schools. <br>
+For further details about the source data, please visit [Toronto Public Health 2018-2019 Immunization Survey](https://www.toronto.ca/city-government/data-research-maps/research-reports/public-health-significant-reports/toronto-schools-immunization-coverage-rates/). 
+
+Let's first lay out some questions to ask from the data. <br>
+- Is there a relationship between school size and vaccination coverage? <br>
+- Are there differences between the two vaccines in terms of coverage rates? <br>
+- What sort of schools have low vaccination rates and high exemption rates? <br>
+- How are schools with low coverage situated? Are they clustered or randomly located? <br>
+
+
+# Exploratory Analysis
+First, load the necessary R packages for the analysis
+
+```{r load-packages, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(dplyr) # data manipulation package that's part of the tidyverse
+library(ggplot2)  #  data visualization
+library(patchwork)#adjust arrangement of plots
+library(plotly) # generate interactive graphics for HTML documents
+library(DT) # provides filtering, pagination, sorting, and many other features in the tables
+```
+
+## Load the data
+There are two possibilities:
+
+1. To download directly from Opendata Toronto, use the provided script to directly access the API:
+
+```{r load-data-api, echo=TRUE, paged.print=FALSE}
+library(opendatatoronto)
+
+package <- show_package("99ff3657-b2e7-4005-a6fd-c36838ccc96d") # get package
+resources <- list_package_resources("99ff3657-b2e7-4005-a6fd-c36838ccc96d") # get all resources for this package
+
+# identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for
+# non-geospatial and GeoJSON for geospatial resources
+datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'geojson'))
+
+# load the first datastore resource as a sample
+data <- filter(datastore_resources, row_number()==1) %>% get_resource()
+glimpse(data)
+```
+<br>
+2. Some people have their data stored as Google Sheets, so using the R package [googlesheets4](https://googlesheets4.tidyverse.org/) is a convenient, alternative way of loading your file.
+
+```{r load-data-googlesheets4, eval=FALSE, include=TRUE}
+library(googlesheets4)
+#data<-read_sheet('googlesheet file location URL')
+```
+
+## View data
+
+We have the following columns which are rather long. So I'll rename them.<br> 
+- id <br>
+- School name <br>
+- Enrolled population <br>
+- Percentage of students vaccinated for [DTP](https://en.wikipedia.org/wiki/DPT_vaccine) <br>
+- Percentage of students with a religious exemption for DTP <br>
+- Percentage of students vaccinated for [MMR](https://en.wikipedia.org/wiki/MMR_vaccine) <br>
+- Percentage of students with a religious exemption for DTP <br>
+- Location of school via latitude and longitude <br>
+
+```{r rename-colnames}
+data<-data %>% rename(school ="School Name",
+                      enrolled = "Enrolled population", 
+                      dtp_pct= "DTP coverage rate (%)", 
+                      dtp_exempt ="DTP Religious exemption rate (%)",
+                      mmr_pct = "MMR coverage rate (%)", 
+                      mmr_exempt = "MMR Religious exemption rate (%)",
+                      lat= 'Lat',
+                      lon= 'Lng')
+```
+<br>
+
+## Student enrollment
+
+Let's first look at the overall student population in a total of 808 schools.
+
+```{r student-enrollment, echo=FALSE}
+data %>% ggplot(aes(enrolled))+
+  geom_histogram( binwidth=20, fill="slategray3", color="#8d9db6", alpha=0.8) +
+  labs(x="Enrolled students", y="number of schools") +
+  theme_minimal()
+ 
+```
+
+```{r total-student-population, echo=TRUE}
+#total student population
+total_student_population<- data %>%  summarise(sum(enrolled)) 
+```
+
+There are a total of `r total_student_population` students, and the most populous schools are: 
+
+```{r largest-student-population}
+# largest student population
+large_schools <- data %>% arrange(desc(enrolled))
+head(large_schools$school,12)
+```
+
+What about the smaller schools?
+
+```{r smallest-student-population}
+small_schools <- data %>% arrange(enrolled)
+head(small_schools$school,12)
+```
+
+<br>
+Clearly, there is a disparity in terms of student enrollment. But does this difference in school size affect vaccination coverage?<br>
+Let's look at the vaccination rates to see if there is an association between school size and vaccination rates.
+<br>
+
+## Overall vaccination coverage
+The vaccination rates provided only relate to the DTP and MMR vaccines, and exclude medical exemptions. They also do not account for incomplete vaccine data (i.e students not yet at the appropriate age for receiving a particular vaccine).<br> Therefore, you may have noticed that the percentages do not add up to 100. 
+<br>
+Here's a summary for DTP coverage.
+
+```{r school-enrollment-vs-vaccination-rate-dtp}
+data %>% summarize(mean=mean(dtp_pct),
+                   median=median(dtp_pct),
+                   iqr=IQR(dtp_pct),
+                   std=sd(dtp_pct),
+                   se=sd(dtp_pct)/sqrt(808))
+
+```
+The mean and median levels are similar, and the the interquartile range isn't very large. This tells us that the overall vaccination coverage for DTP is high among most schools.<br>
+
+## DTP and MMR coverage
+Plotting enrollment and DTP coverage together (with the median shown with the red dashed line). 
+
+```{r school-enrollment-dtp-vaccination, echo=FALSE, message=FALSE, warning=FALSE}
+
+#plot school enrollment vs dtp_pct
+enrl_dtp<- ggplot(data)+
+  geom_point(aes(x=enrolled,y=dtp_pct,name=school),size = 1,
+             shape= 16,alpha=0.5, col= '#4040a1') +
+  geom_hline(yintercept=91, linetype="dashed", color = "red",alpha=0.3,size=0.5)+
+  
+  labs(title="DTP vaccination coverage(%)",
+       subtitle="median shown in red",
+       x="Total enrolled students",y="% Vaccinated") +
+  theme_minimal()+
+  scale_x_continuous(limits = c(0, 2000),breaks=c(0,500,1000,1500,2000))+
+  scale_y_continuous(limits = c(0, 100),breaks=c(0,20,40,60,80,100))+
+    annotate("text", x = 1800, y = 88, label = "median", size = 3, colour = "red")
+```
+
+You can browse over the points to identify the school.<br>
+
+```{r interactive enrl_dtp, echo=FALSE}
+ggplotly(enrl_dtp) # enable interactive features
+
+```
+
+Let's look at MMR..
+
+```{r summarize-mmr, echo=FALSE}
+data %>% summarize(mean=mean(mmr_pct),
+                   median=median(mmr_pct),
+                   iqr=IQR(mmr_pct),
+                   std=sd(mmr_pct),
+                   se=sd(mmr_pct)/sqrt(808))
+```
+Again, we see similar statistics as with DTP. <br>
+
+Here's a plot of the relationship between school enrollment and MMR coverage. 
+
+```{r school-enrollment-mmr-vaccination, echo=FALSE, message=FALSE, warning=FALSE}
+ enrl_mmr<- ggplot(data)+
+  geom_point(aes(x=enrolled,y=mmr_pct, name=school),size = 1,
+             shape= 16, alpha=0.5, col= '#228b22') +
+  geom_hline(yintercept=93.6, linetype="dashed", color = "red",alpha=0.3,size=0.5,label="median")+ 
+  
+  labs(title="MMR vaccination coverage(%)",
+       subtitle="with median shown in red",
+       x="Total enrolled students",y="% Vaccinated") +
+  theme_minimal()+
+  scale_x_continuous(limits = c(0, 2000),breaks=c(0,500,1000,1500,2000))+
+  scale_y_continuous(limits = c(0, 100),breaks= c(0,20,40,60,80,100))+
+  annotate("text", x = 1800, y = 91, label = "median", size = 3, colour = "red")
+```
+
+Again, if you browse over the data points, you can see the specific schools.
+
+```{r interactive enrl_mmr, echo=FALSE}
+ggplotly(enrl_mmr) # for interactive features
+   
+```
+
+
+If you like to see both graphs side-by-side, use the package [patchwork](https://cran.r-project.org/web/packages/patchwork/index.html).
+
+```{r group-plots, message=FALSE, warning=FALSE}
+library(patchwork)
+enrl_dtp + enrl_mmr &  scale_y_continuous(limits = c(20, 100))
+```
+
+Vaccination rates to confer [herd immunity](https://en.wikipedia.org/wiki/Herd_immunity) in a population are dependent on infectiousness of a particular disease. For example, in measles (covered through MMR) it is expected to be over 92%, and Diptheria (through DTP) it is over 83%. <br>
+Looking at the Toronto vaccination coverage, there are some schools (outliers) with very low coverage rates for both vaccines. <br>
+If a distribution is heavily skewed (i.e. not normal and with outliers), it is generally not advisable to pick the mean as a summary statistic. In this case the mean is close to the median, but I still prefer to use the median values as a measure of central tendency because of the presence outliers. <br>
+
+We see similar distributions for both vaccines, with most schools having a coverage rate of over 80%. The median coverage rate for MMR is slightly larger than for DTP (93.6 vs 91 %), with a larger spread of data for DTP. But this may be due to incomplete vaccination records based on the age of the student (the 2nd dose of MMR vaccines are given after the age of 48  months, which is after the starting age for Junior Kindergarten). <br>
+So answer the question "Is there a relationship between school size and vaccination coverage?" 
+
+There isn't a defined relationship between school size and vaccination coverage, but clearly the **schools with low coverage are smaller schools**.
+
+## Schools with low vaccination coverage
+Let's look at the schools that have lower vaccination rates for both vaccines. The graph below flips the axes so you can get an idea of the high coverage rates. 
+
+First DTP.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+data %>% ggplot(aes(dtp_pct))+
+  geom_histogram(binwidth = 1,bins=10,fill="#4040a1", 
+                 color="#e9ecef", alpha=0.5)+
+  geom_vline(xintercept=91, linetype="dashed", color ="red",alpha=0.6,size=0.5,label="median")+
+  labs(title="DTP coverage",x="% vaccinated for DTP")+
+  theme_minimal()+
+  annotate("text", x = 91, y = 70, label = "median", size = 4, colour = "red")
+
+data %>% summarize(med=median(dtp_pct))
+```
+
+AS you can see, the distribution is heavily skewed to the left with most schools over 80% coverage and a median of 91%. 
+<br>
+If we pick the schools with DTP coverage rate less than the overall median value, we can get a closer look at which schools have not only low vaccination rates, but also relatively high rates of religious exemptions. 
+I picked the first quartile(Q1) as the cutoff (i.e containing the lowest 25% of the population). 
+
+In the case of DTP, this is a coverage rate of 87.8%. 
+
+```{r low-vac-dtp}
+quantile(data$dtp_pct)
+low_vac <- data %>% filter(dtp_pct <87.8) %>% arrange((dtp_pct)) #filter for vaccination rate less than 91%
+datatable(low_vac[,c(2,3,4,6)])
+```
+
+There are 200 schools out of the total of 808 (24.8%) with DTP coverage less than the first quartile (87.8%).
+
+If we look at the enrollment data for only these schools...
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+dtplow_coverage<- data %>% filter(dtp_pct<87.8) %>%  ggplot()+
+  geom_point(aes(x=enrolled,y=dtp_pct,name=school),size = 1,shape= 16,alpha=0.5, col= '#4040a1')+
+  labs(title="DTP coverage less than Q1",
+       subtitle="(each point represents an individual school)",
+       x="Total enrolled students",y="% Vaccinated")+
+  geom_hline(aes(yintercept=91), linetype="dashed", color ="red",alpha=0.6,size=0.5)+
+  theme_minimal()+
+  scale_x_continuous(limits = c(0, 2000),breaks=c(500,1000,1500,2000))+
+  scale_y_continuous(limits = c(0, 100),breaks=c(0,20,40,60,80,100))+
+  annotate("text", x = 2000, y = 93, label = "median", size = 3, colour = "red")
+
+ggplotly(dtplow_coverage)
+
+```
+Most of these schools, especially the ones with less that a 70% coverage rate, have less than 250 students.
+<br>
+
+A similar approach can be taken for the MMR vaccine.
+ 
+```{r echo=FALSE}
+
+data %>% summarize(med=median(mmr_pct))
+
+data %>% ggplot(aes(mmr_pct))+
+  geom_histogram(binwidth = 1,bins=10,fill="darkseagreen3", color="#e9ecef", alpha=0.8)+
+  geom_vline(xintercept=93.6, linetype="dashed", color ="red",alpha=0.6,size=0.5)+
+  labs(title="MMR coverage",x="% vaccinated for MMR")+
+   annotate("text", x = 92, y = 100, label = "median", size = 4, colour = "red")+
+  theme_minimal()
+
+```
+
+Similarly, MMR coverage is also heavily skewed to the left with a median of approximately 94%.
+So if we pick a similar cut-off of Q1...
+
+```{r low-vac-mmr}
+quantile(data$mmr_pct)
+low_vac <- data %>% filter(mmr_pct <90.975) #filter for vaccination rate less than 93.6%
+low_vac
+```
+
+There are 202 schools out of a total of 808 (25%) with MMR coverage rates less than the Q1 level. 
+
+```{r mmrlow_coverage, echo=FALSE}
+mmrlow_coverage<- data %>% filter(mmr_pct<90.975) %>%  ggplot()+
+  geom_point(aes(x=enrolled,y=mmr_pct,name=school),size = 1,shape= 16,alpha=0.5,  col= '#228b22')+
+  labs(title="MMR coverage less than Q1",
+       subtitle="(each point represents an individual school)",
+       x="Total enrolled students",y="% Vaccinated")+
+  theme_minimal()+
+  geom_hline(yintercept=93.6, linetype="dashed", color ="red",alpha=0.6,size=0.5)+
+  annotate("text", x = 2000, y = 96, label = "median", size = 4, colour = "red")+
+  scale_x_continuous(limits = c(0, 2000),breaks=c(500,1000,1500,2000))+
+  scale_y_continuous(limits = c(0, 100),breaks=c(0,20,40,60,80,100))
+
+ggplotly(mmrlow_coverage)
+```
+
+<br>
+
+## Religious Exemption rates
+
+The data provided by Toronto Public Health identifies religious exemptions for each of these vaccines. Let's get a summary of that data for each vaccine. <br>
+Looking at the raw data, the exemption rate is exactly the same for both vaccines, so we can conclude that those who applied for exemptions did so for *both*.
+
+```{r dtp_exempt_summary}
+dtp_exempt_summary<-data %>% summarize(mean=mean(dtp_exempt),
+                   median=median(dtp_exempt),
+                   iqr=IQR(dtp_exempt),
+                   std=sd(dtp_exempt),
+                   se=sd(dtp_exempt)/sqrt(808))
+dtp_exempt_summary
+```
+The religious exemption rate is quite low overall. If we look at a histogram of the data, it is very clear that most schools have a rate less than 5%.
+
+```{r echo=FALSE}
+dtp_exempt<-data %>% ggplot(aes(dtp_exempt))+
+  geom_histogram(binwidth = 0.5,bins=10,fill="#4040a1", 
+                 color="#e9ecef", alpha=0.5)+
+  labs(title="DTP vaccine exemption for religious/philosophical reasons",x="% students with religious exemptions")+
+  theme_minimal()
+dtp_exempt
+```
+
+
+```{r echo=FALSE}
+mmr_exempt<-data %>% ggplot(aes(mmr_exempt))+
+  geom_histogram(binwidth = 0.5,bins=10,fill="#228b22", 
+                 color="#e9ecef", alpha=0.5)+
+  labs(title="MMR vaccine exemption for religious/philosophical reasons",x="% students with religious exemptions")+
+  theme_minimal()
+mmr_exempt
+```
+
+What is clearly surprising is there are a couple of schools even over 5% of the population reporting religious exemptions for both vaccines. These schools are overwhelmingly smaller schools. 
+
+```{r echo=FALSE}
+mmr_exempt_point<- data %>% ggplot(aes(enrolled, mmr_exempt))+
+  geom_point(size = 1,shape= 16,alpha=0.5,  col= '#8d9db6')+
+  theme_minimal()+
+  labs(y="% religious/philosophical exemptions",x="enrolled")
+mmr_exempt_point
+```
+
+Let's find out what schools have an exemption rate of over 5%.
+
+```{r filter-exempt-over5pct, echo=FALSE}
+#filter for schools with religious exemption rates over 5%
+dtp_exempt_table<-data %>% 
+  filter(dtp_exempt>5) %>% 
+  arrange(desc(dtp_exempt))
+
+datatable(dtp_exempt_table[,c(2,3,5,7)])
+
+```
+
+```{r echo=FALSE}
+mmr_exempt_table<-data %>% 
+ filter(mmr_exempt>5) %>% 
+  arrange(desc(mmr_exempt))
+datatable(mmr_exempt_table[,c(2,3,6,7)])
+```
+
+It is clear from both the vaccination and exemption rates, the 55 schools with religious exemption rates are small, specialized schools (except Rosedale Heights School of the Arts) with under 500 students. 
+
+## Spatial plotting
+What differentiates these schools with low vaccination coverage rates? 
+The observations above point to them being smaller, specialized schools. 
+Does location have anything to do with it?
+
+In order to spatially and interactively view the schools, I am using a simple method:
+The [leaflet](http://rstudio.github.io/leaflet/) package is R package that enables users to control leaflet maps, which are an open-source, javascript library for generating interactive maps. 
+
+```{r load-spatial-packages, message=FALSE}
+library(leaflet)
+library(RDSTK)
+
+```
+
+```{r plot-DTP-MMR-religious-exemption}
+dtp_exempt_plot<- leaflet(options = leafletOptions(minZoom = 0, maxZoom = 15)) %>%    
+  addTiles() %>%  
+  addMarkers(lng= dtp_exempt_table$lon, lat=dtp_exempt_table$lat, popup=dtp_exempt_table$school,dtp_exempt$dtp_exempt)
+dtp_exempt_plot
+```
+
+Clearly the schools are dispersed randomly and in both densely populated and suburban areas.
+
+The take-away from this investigation is that the smaller schools are heavily concentrated with students who have religious exemptions for the two main childhood vaccines, DTP and MMR. If these schools are outliers compared to the larger schools, how can we explain the extremely low exemption rates in large school.
+The low coverage schools are not advertised as dedicated for individuals with exemptions for vaccines so there are many questions that can be asked:
+<br>
+- Do these schools function as schools solely dedicated for those families who chose not to vaccinate their children?
+- If not, why is there a disparity compared to larger schools?
+- Is there a selection process for students to attend? 
+- Is the selection process impartial, or biased towards families seeking medical or religious exemptions?
+- Do students with medical or religious exemptions congregate in particular schools for another reason?
+
