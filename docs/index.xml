@@ -9,13 +9,12 @@
     <generator>Distill</generator>
     <lastBuildDate>Thu, 14 Jan 2021 00:00:00 +0000</lastBuildDate>
     <item>
-      <title>Welcome to My Blog</title>
-      <dc:creator>Nora Jones</dc:creator>
-      <link>https://sherosha.github.io/SheroshaRBlog/posts/welcome</link>
-      <description>Welcome to our new blog, My Blog. We hope you enjoy 
-reading what we have to say!</description>
-      <guid>https://sherosha.github.io/SheroshaRBlog/posts/welcome</guid>
+      <title>Summarizing Toronto Public School Immunization Data from 2018/2019</title>
+      <link>https://sherosha.github.io/SheroshaRBlog/posts/2021-01-14-toronto-school-immunization</link>
+      <description>This is a summary of 2018-2019 immunization data from Toronto Public Health.</description>
+      <guid>https://sherosha.github.io/SheroshaRBlog/posts/2021-01-14-toronto-school-immunization</guid>
       <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://sherosha.github.io/SheroshaRBlog/posts/2021-01-14-toronto-school-immunization/toronto-school-immunization_files/figure-html5/student-enrollment-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
   </channel>
 </rss>
