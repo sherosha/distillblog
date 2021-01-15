@@ -396,14 +396,15 @@ dtp_exempt_plot<- leaflet(options = leafletOptions(minZoom = 0, maxZoom = 15)) %
 dtp_exempt_plot
 ```
 
-Clearly the schools are dispersed randomly and in both densely populated and suburban areas.
+Clearly the schools are dispersed randomly and in both densely populated and suburban areas.<br>
 
-The take-away from this investigation is that the smaller schools are heavily concentrated with students who have religious exemptions for the two main childhood vaccines, DTP and MMR. If these schools are outliers compared to the larger schools, how can we explain the extremely low exemption rates in large school.
-The low coverage schools are not advertised as dedicated for individuals with exemptions for vaccines so there are many questions that can be asked:
+The take-away from this investigation is that the smaller schools are heavily concentrated with students who have religious exemptions for the two main childhood vaccines, DTP and MMR. <br>
+If these schools are outliers compared to the larger schools, how can we explain the extremely low exemption rates in large school. The low coverage schools are not advertised as dedicated for individuals with exemptions for vaccines so there are many questions that can be further investigated:
 <br>
-- Do these schools function as schools solely dedicated for those families who chose not to vaccinate their children?
-- If not, why is there a disparity compared to larger schools?
-- Is there a selection process for students to attend? 
-- Is the selection process impartial, or biased towards families seeking medical or religious exemptions?
-- Do students with medical or religious exemptions congregate in particular schools for another reason?
+
+- Do these schools function as schools solely dedicated for those families who chose not to vaccinate their children? <br>
+- If not, why is there a disparity compared to larger schools? <br>
+- Is there a selection process for students to attend? <br>
+- Is the selection process impartial, or biased towards families seeking medical or religious exemptions? <br>
+- Do students with medical or religious exemptions congregate in particular schools for another reason? <br>
 

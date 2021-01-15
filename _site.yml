@@ -5,6 +5,7 @@ description: |
 output_dir: "docs"
 base_url: https://sherosha.github.io/SheroshaRBlog/
 navbar:
+  search: false
   right:
     - text: "Home"
       href: index.html
@@ -14,4 +15,8 @@ navbar:
       href: resources.html
     - text: "Random"
       href: random.html
+    - icon: fab fa-github
+      href: https://github.com/sherosha
+    - icon: fab fa-twitter-square
+      href: https://twitter.com/SheroshaR
 output: distill::distill_article
