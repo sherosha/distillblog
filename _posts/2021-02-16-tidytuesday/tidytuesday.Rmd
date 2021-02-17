@@ -1,0 +1,36 @@
+---
+title: "#TidyTuesday"
+description: |
+author: 
+  - name: Sherosha Raj
+  - url: 
+date: "`r Sys.Date()`"
+output:
+  distill::distill_article:
+    categories: 
+    - TidyTuesday
+    - ggplot
+    - EDA
+    
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+I've started following up with the wonderful #TidyTuesday event where R users across the globe join in on summarizing and arranging [publicly available data](https://github.com/rfordatascience/tidytuesday) to make meaningful charts with ggplot2, tidyr, dplyr, and other tools in the tidyverse.
+Here are some of my latest submissions.
+
+
+### February 9, 2021
+
+<blockquote class="twitter-tweet" data-dnt="true" data-theme="light"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> Family Income by race (Data: Urban Institute). Also included recession years to see how the drop in income follows economic slowdowns and if there are racial differences<br>code:github/sherosha/TidyTuesday<a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/R4DScommunity?ref_src=twsrc%5Etfw">@R4DScommunity</a><br> <a href="https://twitter.com/hashtag/r4ds?src=hash&amp;ref_src=twsrc%5Etfw">#r4ds</a> <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a> <a href="https://twitter.com/hashtag/R4Ds?src=hash&amp;ref_src=twsrc%5Etfw">#R4Ds</a> <a href="https://t.co/3su7qoUr7P">pic.twitter.com/3su7qoUr7P</a></p>&mdash; Sherosha Raj (@SheroshaR) <a href="https://twitter.com/SheroshaR/status/1361731055129137156?ref_src=twsrc%5Etfw">February 16, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+
+### January 26, 2021
+<blockquote class="twitter-tweet" data-dnt="true"><p lang="en" dir="ltr">Take out making a mess? Bit late but here&#39;s my <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> from last week. <br>Just looking at plastics used in take-out food last year. Make an effort to Cook @ home folks!<br>code:github/sherosha/TidyTuesday<a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/R4DScommunity?ref_src=twsrc%5Etfw">@R4DScommunity</a><br> <a href="https://twitter.com/hashtag/r4ds?src=hash&amp;ref_src=twsrc%5Etfw">#r4ds</a> <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a> <a href="https://twitter.com/hashtag/R4Ds?src=hash&amp;ref_src=twsrc%5Etfw">#R4Ds</a> <a href="https://t.co/UIUpeRMcGy">pic.twitter.com/UIUpeRMcGy</a></p>&mdash; Sherosha Raj (@SheroshaR) <a href="https://twitter.com/SheroshaR/status/1356705334400847872?ref_src=twsrc%5Etfw">February 2, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+
+
+### January 19, 2021
+
+<blockquote class="twitter-tweet" data-dnt="true"><p lang="en" dir="ltr">My first <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> post🥳 looking @ waste disposal <a href="https://twitter.com/hashtag/rKenyaCensus?src=hash&amp;ref_src=twsrc%5Etfw">#rKenyaCensus</a> <a href="https://twitter.com/Shel_Kariuki?ref_src=twsrc%5Etfw">@Shel_Kariuki</a>🙏🏼 Looks like most households in the majority of counties 🔥burn their waste. <br>code:github/sherosha/TidyTuesday<a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/R4DScommunity?ref_src=twsrc%5Etfw">@R4DScommunity</a> <a href="https://twitter.com/hashtag/r4ds?src=hash&amp;ref_src=twsrc%5Etfw">#r4ds</a> <a href="https://twitter.com/hashtag/ggplot2?src=hash&amp;ref_src=twsrc%5Etfw">#ggplot2</a> <a href="https://twitter.com/hashtag/R4Ds?src=hash&amp;ref_src=twsrc%5Etfw">#R4Ds</a> <a href="https://t.co/zg2I1xdOjT">pic.twitter.com/zg2I1xdOjT</a></p>&mdash; Sherosha Raj (@SheroshaR) <a href="https://twitter.com/SheroshaR/status/1352267366869184514?ref_src=twsrc%5Etfw">January 21, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
