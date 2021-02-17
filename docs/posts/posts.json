@@ -1,5 +1,26 @@
 [
   {
+    "path": "posts/2021-02-16-tidytuesday/",
+    "title": "#TidyTuesday",
+    "description": {},
+    "author": [
+      {
+        "name": "Sherosha Raj",
+        "url": {}
+      },
+      {
+        "name": "",
+        "url": {}
+      }
+    ],
+    "date": "2021-02-16",
+    "categories": [],
+    "contents": "\r\nI’ve started following up with the wonderful #TidyTuesday event where R users across the globe join in on summarizing and arranging publicly available data to make meaningful charts with ggplot2, tidyr, dplyr, and other tools in the tidyverse. Here are some of my latest submissions.\r\nFebruary 9, 2021\r\n\r\n\r\n#TidyTuesday Family Income by race (Data: Urban Institute). Also included recession years to see how the drop in income follows economic slowdowns and if there are racial differencescode:github/sherosha/TidyTuesday#rstats @R4DScommunity#r4ds #ggplot2 #R4Ds pic.twitter.com/3su7qoUr7P\r\n\r\n— Sherosha Raj (@SheroshaR) February 16, 2021\r\n\r\nJanuary 26, 2021\r\n\r\n\r\nTake out making a mess? Bit late but here's my #TidyTuesday from last week. Just looking at plastics used in take-out food last year. Make an effort to Cook @ home folks!code:github/sherosha/TidyTuesday#rstats @R4DScommunity#r4ds #ggplot2 #R4Ds pic.twitter.com/UIUpeRMcGy\r\n\r\n— Sherosha Raj (@SheroshaR) February 2, 2021\r\n\r\nJanuary 19, 2021\r\n\r\n\r\nMy first #TidyTuesday post🥳 looking @ waste disposal #rKenyaCensus @Shel_Kariuki🙏🏼 Looks like most households in the majority of counties 🔥burn their waste. code:github/sherosha/TidyTuesday#rstats @R4DScommunity #r4ds #ggplot2 #R4Ds pic.twitter.com/zg2I1xdOjT\r\n\r\n— Sherosha Raj (@SheroshaR) January 21, 2021\r\n\r\n\r\n\r\n\r\n",
+    "preview": {},
+    "last_modified": "2021-02-16T22:03:16-05:00",
+    "input_file": "tidytuesday.utf8.md"
+  },
+  {
     "path": "posts/2021-01-14-toronto-school-immunization/",
     "title": "Summarizing Toronto Public School Immunization Data from 2018/2019",
     "description": "This is a summary of 2018-2019 immunization data from Toronto Public Health.",
